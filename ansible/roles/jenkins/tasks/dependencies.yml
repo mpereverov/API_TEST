@@ -1,0 +1,14 @@
+---
+
+- name: Install jenkins dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - python-lxml
+    - python-jenkins
+    - python-pip
+    - openjdk-7-jre
+    - openjdk-7-jdk
+- pip:
+    name: lxml

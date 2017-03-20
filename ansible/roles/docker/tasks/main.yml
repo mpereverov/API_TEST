@@ -1,0 +1,74 @@
+---
+
+- name: Uninstall old versions
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+  with_items:
+    - docker-engine
+    - docker
+    - docker-ce
+
+  ignore_errors: yes
+
+- name: Read uname
+  shell: uname -r
+  register: uname_output
+
+- name: Install linux-image-extra-* packages to enable AuFS driver
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+      - linux-image-extra-{{ uname_output.stdout }}
+      - linux-image-extra-virtual
+
+- name: Install packages to allow apt to use a repository over HTTPS
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Add Docker repository key
+  apt_key:
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    keyserver: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  register: add_repository_key
+  ignore_errors: true
+
+- name: Add Docker’s official GPG key
+  shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+  when: add_repository_key|failed
+
+#- name: Add Docker’s official GPG key
+#  get_url:
+#    url: https://download.docker.com/linux/ubuntu/gpg
+#    dest: /tmp
+#  shell: apt-key add -
+##  when: add_repository_key|failed
+
+- name: Read Ubuntu release
+  shell: lsb_release -cs
+  register: lsb_release
+
+- name: Add Docker repository and update apt cache
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable
+    state: present
+
+- name: Install docker package
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
