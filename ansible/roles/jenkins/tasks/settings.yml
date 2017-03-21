@@ -45,3 +45,20 @@
   when: (jenkins_users_config is defined and jenkins_users_config.changed) or
         (jenkins_http_config is defined and jenkins_http_config.changed) or
         (jenkins_home_config is defined and jenkins_home_config.changed)
+
+- name: Add jenkins user to sudo group
+  user:
+    name: jenkins
+    groups: sudo,docker
+    append: yes
+
+- name: Add NOPASSWORD for jenkins user
+  lineinfile:
+    destfile: /etc/sudoers
+    line: 'jenkins ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: DOCKER_OPTS=' -G jenkins'
+  lineinfile:
+    destfile: /etc/default/docker
+    line: "DOCKER_OPTS=' -G jenkins'"

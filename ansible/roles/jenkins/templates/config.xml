@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Описание</description>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
@@ -13,10 +13,44 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git clone https://github.com/mpereverov/API_TEST.git
-rm -rf API_TEST/.git/</command>
+      <command>sudo rm -rf /var/www/
+sudo mkdir -p /var/www/html/
+cd /var/www/html/
+sudo rm -rf /API_TEST/
+sudo git clone https://github.com/mpereverov/API_TEST.git
+sudo rm -rf API_TEST/.git/
+sudo cp API_TEST/Dockerfile $WORKSPACE</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.CreateImageCommand">
+        <dockerFolder>$WORKSPACE</dockerFolder>
+        <imageTag>hello-api</imageTag>
+        <dockerFile>Dockerfile</dockerFile>
+        <noCache>true</noCache>
+        <rm>true</rm>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.TagImageCommand">
+        <image>hello-api</image>
+        <repository>mpereverov/hello-api</repository>
+        <tag>latest</tag>
+        <ignoreIfNotFound>false</ignoreIfNotFound>
+        <withForce>false</withForce>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
+        <dockerRegistryEndpoint plugin="docker-commons@1.6">
+          <url>https://hub.docker.com</url>
+          <credentialsId>41b61e03-b52d-4622-b086-e0fe86123e2e</credentialsId>
+        </dockerRegistryEndpoint>
+        <image>mpereverov/hello-api</image>
+        <tag>latest</tag>
+        <registry></registry>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
   </builders>
   <publishers/>
   <buildWrappers/>
