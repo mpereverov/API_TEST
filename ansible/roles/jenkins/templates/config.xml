@@ -13,13 +13,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>sudo rm -rf /var/www/
-sudo mkdir -p /var/www/html/
-cd /var/www/html/
-sudo rm -rf /API_TEST/
-sudo git clone https://github.com/mpereverov/API_TEST.git
-sudo rm -rf API_TEST/.git/
-sudo cp API_TEST/Dockerfile $WORKSPACE/Dockerfile</command>
+      <command>
+sudo cp -a /vagrant/API_TEST/hello/ /var/www/html/api_test/hello/
+sudo cp /vagrant/API_TEST/Dockerfile $WORKSPACE/Dockerfile</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
