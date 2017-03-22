@@ -14,8 +14,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-sudo cp -a /vagrant/API_TEST/hello/ /var/www/html/api_test/hello/
-sudo cp /vagrant/API_TEST/Dockerfile $WORKSPACE/Dockerfile</command>
+sudo cp -a /vagrant/hello/ /var/www/html/api_test/hello/
+sudo cp /vagrant/Dockerfile $WORKSPACE/Dockerfile</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
