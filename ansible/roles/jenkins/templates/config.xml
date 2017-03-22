@@ -13,8 +13,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
-sudo cp -a /vagrant/hello/ /var/www/html/api_test/hello/
+      <command>sudo mkdir -p /var/www/html/api_test/
+sudo cp -a /vagrant/hello/ /var/www/html/api_test/
 sudo cp /vagrant/Dockerfile $WORKSPACE/Dockerfile</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
