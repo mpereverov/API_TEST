@@ -5,3 +5,8 @@
     name: build_hello_app_in_docker
     password: admin
     user: admin
+
+- name: Copy config files
+  copy:
+    src: /vagrant/ansible/roles/jenkins/conf/
+    dest: /var/lib/jenkins/

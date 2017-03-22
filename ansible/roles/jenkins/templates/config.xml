@@ -19,7 +19,7 @@ cd /var/www/html/
 sudo rm -rf /API_TEST/
 sudo git clone https://github.com/mpereverov/API_TEST.git
 sudo rm -rf API_TEST/.git/
-sudo cp API_TEST/Dockerfile $WORKSPACE</command>
+sudo cp API_TEST/Dockerfile $WORKSPACE/Dockerfile</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.40">
@@ -44,7 +44,7 @@ sudo cp API_TEST/Dockerfile $WORKSPACE</command>
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.6">
           <url>https://hub.docker.com</url>
-          <credentialsId>41b61e03-b52d-4622-b086-e0fe86123e2e</credentialsId>
+          <credentialsId>508bb073-f93b-4ec1-80ab-f3c823efe8df</credentialsId>
         </dockerRegistryEndpoint>
         <image>mpereverov/hello-api</image>
         <tag>latest</tag>
